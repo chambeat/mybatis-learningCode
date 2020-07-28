@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis中的动态sql语句
+    (1)if标签
+    (2)where标签
+    (3)foreach标签
+ -->
+<mapper namespace="com.chm.dao.IUserDao">
+    <select id="findUserInIds" resultType="com.chm.domain.User" parameterType="com.chm.domain.QueryVo">
+        select * from user
+        <where>
+            <if test="ids != null and ids.size()>0">
+                <foreach collection="ids" open="and id in (" close=")" item="uid" separator=", ">
+                    #{uid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

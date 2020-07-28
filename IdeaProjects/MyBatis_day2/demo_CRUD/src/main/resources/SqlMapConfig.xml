@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 配置properties：
+        可以在标签内部配置连接数据库的信息，也可以通过属性来引用外部配置文件中的信息。
+        常用标签：2个（如下）
+        1.resource属性
+            用于指定配置文件的位置，必须按照类路径的写法来写，且必须存在于类路径下。
+        2.url属性
+            要求按照url的写法来写。
+            使用file协议的url：
+                file:///"文件路径"\文件名(含后缀)
+    -->
+    <!--<properties resource="jdbcConfig.properties"/>-->
+    <properties url="file:///D:\myCode_MyBatis\IdeaProjects\MyBatis_day2\demo_CRUD\src\main\resources\jdbcConfig.properties"/>
+        <!-- 注：myDB之后所添加的内容是为了解决MySQL的时区问题。 -->
+        <!--<property name="driver" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/myDB?serverTimezone=GMT%2B8"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="chm699276"></property>-->
+
+    <!-- 使用typeAliases配置别名，它只能配置domain中类的别名。
+        可以使用以下方式(2个)：
+            1.使用typeAlias标签
+            2.使用package标签
+    -->
+    <typeAliases>
+        <!-- typeAlias标签：type属性指定实体类全限定类名，alias属性指定实体类的别名。注意，当指定了别名就不再区分大小写。 -->
+        <!--<typeAlias type="com.chm.domain.User" alias="user"></typeAlias>-->
+
+        <!-- typeAliases中的package标签用于指定要配置别名的包，当指定后，该包下的实体类都会注册别名，且类名就是别名，不再区分大小写。 -->
+        <package name="com.chm.domain"></package>
+    </typeAliases>
+
+    <!-- 配置环境 -->
+    <environments default="mysql">
+        <!-- 配置mysql的环境 -->
+        <environment id="mysql">
+            <!-- 配置事务 -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- 配置连接池 -->
+            <!--
+                1.连接池：
+                    我们在实际开发中都会使用连接池。
+                    好处：可以减少获取连接所消耗的时间。
+
+                2.MyBatis中的连接池：
+                    mybatis连接池提供了3种方式的配置：
+                        配置的位置：
+                            主配置文件SqlMapConfig.xml中的dataSource标签，type属性指定采用何种连接池方式。
+                        type属性的取值：
+                            (1)POOLED
+                                采用传统的javax.sql.DataSource规范中的连接池，mybatis中有针对规范的实现。
+                            (2)UNPOOLED
+                                采用传统的获取连接的方式，虽然也实现javax.sql.DataSource接口，但并没有使用池的思想。
+                            (3)JNDI(仅作拓展)
+                                采用服务器提供的JNDI技术实现，来获取DataSource对象，不同服务器拿到的DataSource不同。
+                                注意：若不是web或maven的war工程，是无法使用的。
+                                Tomcat服务器采用的是dbcp连接池。
+            -->
+            <dataSource type="Pooled">
+                <property name="driver" value="${driver}"></property>
+                <property name="url" value="${url}"></property>
+                <property name="username" value="${username}"></property>
+                <property name="password" value="${password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 配置映射文件的位置 -->
+    <mappers>
+        <!--<mapper resource="com/chm/dao/IUserDao.xml"></mapper>-->
+        <!-- mappers中的package标签用于指定dao接口所在的包。当指定后，就不用再写mapper以及resource或class了。 -->
+        <package name="com.chm.dao"></package>
+    </mappers>
+</configuration>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置查询所有 -->
+<mapper namespace="com.chm.dao.IUserDao">
+    <!-- 使用resultMap的方式，解决属性名与字段名不一致的问题
+         配置 实体类属性名和数据库字段名的对应关系
+    -->
+    <resultMap id="userMap" type="com.chm.domain.User">
+        <!-- 主键字段的对应 -->
+        <id property="userId" column="id"></id>
+        <!-- 非主键字段的对应 -->
+        <result property="userName" column="username"></result>
+        <result property="userBirthday" column="birthday"></result>
+        <result property="userSex" column="sex"></result>
+        <result property="userAddress" column="address"></result>
+    </resultMap>
+
+    <!-- 查询所有 -->
+    <select id="findAll" resultMap="userMap">
+        select * from user
+    </select>
+
+    <!-- 保存(插入) -->
+    <insert id="saveUser" parameterType="com.chm.domain.User">
+        <!-- 配置 在插入操作后，获取插入数据的id -->
+        <selectKey keyProperty="userId" keyColumn="id" resultType="int" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into user(username,birthday,sex,address) values(#{userName},#{userBirthday},#{userSex},#{userAddress})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateUser" parameterType="com.chm.domain.User">
+        update user set username=#{userName}, birthday=#{userBirthday}, sex=#{userSex}, address=#{userAddress} where id=#{userId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user where id = #{id}
+    </delete>
+
+    <!-- 根据id查询一个 -->
+    <select id="findById" parameterType="int" resultMap="userMap">
+        select * from user where id = #{id}
+    </select>
+
+    <!-- 根据username模糊查询 -->
+    <select id="findByName" parameterType="String" resultMap="userMap">
+        select * from user where username like #{name}
+    </select>
+
+    <!-- 统计总记录数 -->
+    <select id="countTotal" resultType="int">
+        select count(id) from user
+    </select>
+
+
+    <!-- parameterType(传入参数的类型)：
+            1.简单类型(int/String/Integer)
+            2.pojo对象(JavaBean/实体类对象，在此程序中为User对象)
+            3.pojo包装对象(在此程序中为QueryVo对象)
+                广泛应用：由多个对象组成一个查询条件时常用pojo包装对象。
+    -->
+
+    <!-- 根据queryVo模糊查询 -->
+    <select id="findUserByVo" parameterType="com.chm.domain.QueryVo" resultType="com.chm.domain.User">
+        <!-- 使用别名的方式，解决属性名与字段名不一致的问题 -->
+        select id as userId, username as userName, birthday as userBirthday, sex as userSex, address as userAddress from
+        user where username like #{user.userName}
+    </select>
+</mapper>

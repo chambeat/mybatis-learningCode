@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.chm</groupId>
+    <artifactId>demo_mybatis</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <!-- MyBatis的ORM思想
+        ORM：对象关系映射(Object Relational Mapping)
+            作用：
+                把数据表和实体类及实体类的属性对应起来，使得通过操作实体类就能操作数据表。
+    -->
+
+
+
+
+    <!-- MyBatis的环境搭建
+        MyBatis的环境搭建分为4步：
+            1.创建maven工程并导入依赖坐标
+            2.创建实体类和dao的接口
+            3.创建MyBatis的主配置文件
+                SqlMapConfig.xml
+            4.创建映射配置文件
+                IUserDao.xml
+
+
+      * 环境搭建注意事项：
+            1. 创建IUserDao.xml和IUserDao.java时，此名称是为了和之前的命名习惯保持一致。
+                在MyBatis中把持久层的映射文件(IUserDao.xml)和操作接口(IUserDao.java)也叫做“Mapper”。
+                因此，“IUserDao”和“IUserMapper”是一样的。
+            2. 在IDEA中创建目录时，和创建包是不一样的。
+                包在创建时：com.chm.dao是三级结构
+                目录在创建时：com.chm.dao是一级目录
+            3.MyBatis的映射配置文件必须和dao接口的包结构相同。
+            4.映射配置文件的mapper标签namespace属性的取值必须是dao接口的全限定类名(如：com.chm.dao.IUserDao)。
+            5.映射配置文件的操作配置(select)，id属性的取值必须是dao接口的方法名。
+
+            当遵从了以上3~5点之后，我们在开发中就无须再写dao的实现类。MyBatis会搞定余下的工作。
+    -->
+
+
+
+
+    <!-- MyBatis的入门案例
+        实现单表CRUD操作，一共分为6步：
+            1.读取配置文件
+            2.创建SqlSessionFactory
+            3.创建SqlSession
+            4.用SqlSession来创建Dao接口的代理对象
+            5.用代理对象来执行dao中的方法
+            6.释放资源
+
+        注意事项：
+            必须在映射配置文件中告知MyBatis，要把查询的结果封装到哪个实体类中。
+            配置方式：指定实体类的全限定类名（resultType部分）。
+            <select id="findAll" resultType="com.chm.domain.User">
+                select * from user
+            </select>
+    -->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13-beta-3</version>
+        </dependency>
+    </dependencies>
+</project>
